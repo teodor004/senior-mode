@@ -1,0 +1,19 @@
+{
+  "worktree": { "baseRef": "head" },
+  "permissions": {
+    "allow": [
+      "Bash(git status *)", "Bash(git diff *)", "Bash(git log *)", "Bash(git show *)",
+      "Bash(git add *)", "Bash(git commit *)", "Bash(git switch *)", "Bash(git merge *)",
+      "Bash(git worktree list *)", "Bash(git rev-parse *)", "Bash(git merge-base *)",
+      "Edit(.senior/**)", "Write(.senior/**)"
+    ],
+    "ask": ["Bash(git merge * main)", "Bash(git merge * master)", "Bash(git worktree remove *)"],
+    "deny": [
+      "Bash(git push *)", "Bash(rm -rf *)", "Bash(sudo *)", "Bash(curl * | sh)",
+      "Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+  }
+}

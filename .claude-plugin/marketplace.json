@@ -1,0 +1,12 @@
+{
+  "name": "senior-mode-market",
+  "description": "Marketplace for the senior-mode Claude Code plugin",
+  "owner": { "name": "teodor004", "url": "https://github.com/teodor004" },
+  "plugins": [
+    {
+      "name": "senior-mode",
+      "source": "./",
+      "description": "Ultracode-lite: senior-engineer plan → fan-out → review → merge workflow built from skills and subagents"
+    }
+  ]
+}

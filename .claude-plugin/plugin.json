@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "senior-mode",
+  "displayName": "Senior Mode (ultracode-lite)",
+  "version": "0.1.0",
+  "description": "Senior-engineer build orchestrator: intake, explore, spec, plan, routed parallel subagents (model+effort per task), adversarial review, test gate, merge, report - with human STOP checkpoints.",
+  "author": { "name": "teodor004", "url": "https://github.com/teodor004" },
+  "homepage": "https://github.com/teodor004/senior-mode",
+  "repository": "https://github.com/teodor004/senior-mode",
+  "license": "MIT",
+  "keywords": ["orchestration", "subagents", "planning", "code-review", "worktrees", "ultracode"]
+}
