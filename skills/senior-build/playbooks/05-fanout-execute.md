@@ -1,7 +1,7 @@
 # 05 — Fan-out & Execute
 
 ## Preconditions
-state.phase = `execute`; plan approved (or --auto); `base_sha` = HEAD of senior branch containing the plan; `.claude/settings.json` has `worktree.baseRef: "head"` (if unknown, the base-check step below protects you).
+state.phase = `execute`; plan approved (or --auto); `base_sha` = HEAD of the senior branch, recorded at intake (`.senior/` is git-excluded, so planning adds no commits); `.claude/settings.json` has `worktree.baseRef: "head"` (if unknown, the base-check step below protects you).
 
 ## Per wave
 1. Select WPs in the wave whose deps are merged. Cap to max_parallel; queue the rest.
@@ -32,7 +32,7 @@ RESULT
 ```
 
 3. Spawn each with the Agent tool: `subagent_type` = routed agent, `description` = "<WP-id> <title>", optional `model`/`effort` only for escalations. Agents with `isolation: worktree` in frontmatter get their own worktree automatically.
-4. On each return: parse RESULT; record `worktreeBranch`/`worktreePath` if the tool result provides them (prefer them over self-reported branch); update state.wps and run-log.md (agent, model, effort, status, duration if shown).
+4. On each return: parse RESULT; record the tool result's `worktreeBranch`/`worktreePath` (returned when the agent made changes; prefer them over the self-reported branch) in `state.wps.<id>.branch` and `state.wps.<id>.worktree` — the fix loop in 06 needs the path; update run-log.md (agent, model, effort, status, duration if shown).
 5. Handling:
    - `done` → queue for phase 06 review.
    - `partial` (hit maxTurns) → resume the same subagent once with "continue to completion", else escalate per 04.

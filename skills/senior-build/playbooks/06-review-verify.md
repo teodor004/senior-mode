@@ -31,7 +31,8 @@ REVIEW
 Rule for reviewers: every blocker/major must include evidence; claims without evidence are downgraded to minor.
 
 ## 3. Bounded fix loop
-- Group blocker+major findings by WP. Send to the WP's original subagent (resume if possible) or a new one of the same type, on the same branch: "Fix these findings; re-run tests; commit; return RESULT".
+- Group blocker+major findings by WP. Prefer resuming the WP's original subagent (SendMessage) — it is still in its worktree on the WP branch: "Fix these findings; re-run tests; commit; return RESULT".
+- If you must start a new agent of the same type, it can't `git switch` to the WP branch: that branch is checked out in the original worktree. Begin its prompt with `cd <state.wps.<id>.worktree>`, say that all edits, tests and the commit happen there on `<branch>`, and tell it to skip the base-check rule (the WP's commits already sit on top of base).
 - After each fix round, re-run test gate and a *targeted* re-review (same reviewer, only the findings + new diff).
 - Max 2 rounds per WP → then escalate once per 04 → then STOP and ask the human with the unresolved findings.
 - Minor/nit: batch into the report as follow-ups; do not loop on them.

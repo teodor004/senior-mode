@@ -34,5 +34,5 @@ Same `architect-planner` (continue/resume it if possible, else new call with spe
 - If < 3 WPs or all WPs are sequential → recommend NOT fanning out (see 04 "When not to fan out").
 
 ## Gate — STOP-2
-Commit planning artifacts on the senior branch if the user keeps `.senior/` tracked (`git add .senior/<slug> && git commit -m "chore(senior): spec and plan for <slug>"`), then record `base_sha` = new HEAD (worktrees must see this commit).
+Nothing is committed here: `.senior/` is git-excluded (playbook 00), so `base_sha` stays the senior-branch HEAD recorded at intake. Worktrees don't need `.senior/` — each implementer gets its WP pasted into the prompt.
 Present STOP-2 with WP table, waves, routing, risks, estimated cost. Wait (unless --auto). Set phase `awaiting-approval` while waiting, then `execute`.

@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
-# SubagentStart / SubagentStop: append one JSON line per event to .senior/run-log.jsonl
+# SubagentStart / SubagentStop: append one JSON line per event to .senior/run-log.jsonl (senior-mode runs only)
 set -euo pipefail
 input="$(cat)"
+. "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+in_senior_run || exit 0
 root="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 mkdir -p "$root/.senior"
-
-# json_str KEY [FILE]: first string value of "KEY" in the hook input (or FILE), still JSON-escaped.
-json_str() {
-  { if [ -n "${2:-}" ]; then cat "$2"; else printf '%s' "$input"; fi; } | tr -d '\r\n' \
-    | grep -oE '"'"$1"'"[[:space:]]*:[[:space:]]*"([^"\\]|\\.)*"' | head -n1 \
-    | sed -E 's/^"'"$1"'"[[:space:]]*:[[:space:]]*"//; s/"$//' || true
-}
 
 # field KEY [DEFAULT]: the value as a JSON string, else DEFAULT, else null. Values are still escaped, so they embed safely.
 field() {

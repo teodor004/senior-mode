@@ -33,8 +33,9 @@ Plugins cannot set permissions or `worktree.baseRef`, so add this to `.claude/se
 { "worktree": { "baseRef": "head" } }
 ```
 Without it, worktree subagents branch from your *default branch*, not your current branch.
-Also: `echo ".claude/worktrees/" >> .gitignore` and `echo ".senior/" >> .gitignore` (or commit `.senior/<slug>/` as design docs — your choice).
-Hooks need only `bash`, `grep`, `sed` and `git` (all present in Git Bash, WSL, macOS and Linux) — no `jq`. Run Claude Code inside WSL2, not PowerShell.
+Each run checks that `.senior/` and `.claude/worktrees/` are git-ignored and adds them to `.git/info/exclude` if not, so a run never dirties your working tree. (`/senior-build` offers to copy the spec, ADRs and report into a tracked folder at the end.)
+Start Claude Code from the repo path with exactly the letter case git prints (`git rev-parse --show-toplevel`). On Windows and macOS a mismatch such as `work` vs `Work` makes Claude Code refuse to create worktrees; the run stops at intake if it detects one.
+Hooks need only `bash`, `grep`, `sed` and `git` (all present in Git Bash, WSL, macOS and Linux) — no `jq`. The Bash guard and the subagent logger only act during senior-mode runs; in other projects and sessions they do nothing. Run Claude Code inside WSL2, not PowerShell.
 
 ## Usage
 ```text

@@ -8,7 +8,8 @@ disable-model-invocation: true
 Plan: $ARGUMENTS
 
 1. Read the plan and its `wp/` files. Validate: machine-readable JSON block present, no file owned twice, DAG acyclic, every WP has acceptance criteria and a test command. If invalid, list problems and stop.
-2. Load/restore `.senior/<slug>/state.json` (create if missing; base_sha = current HEAD on `senior/<slug>`; create that branch if absent).
+2. Run the path-case and kit-files-ignored checks from the Preflight in `${CLAUDE_SKILL_DIR}/../senior-build/playbooks/00-intake-clarify.md` (stop on a path-case mismatch).
+   Then load/restore `.senior/<slug>/state.json` (create if missing; base_sha = current HEAD on `senior/<slug>`; create that branch if absent).
 3. Confirm with the user (unless `--auto`): waves, agents/models, max parallel. This is STOP-2.
 4. Read and follow in order:
    - `${CLAUDE_SKILL_DIR}/../senior-build/playbooks/04-routing-policy.md`

@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
-# PreToolUse(Bash): deny destructive or exfiltrating commands. Applies to main session AND subagents.
-# Plain bash/grep/sed (no jq), so the guard is never silently off for lack of a dependency.
+# PreToolUse(Bash): deny destructive or exfiltrating commands during senior-mode runs (main session AND subagents).
+# Outside a run it does nothing, so installing the plugin doesn't change Claude's behaviour in other projects.
 set -euo pipefail
 input="$(cat)"
-
-# json_str KEY [FILE]: first string value of "KEY" in the hook input (or FILE), still JSON-escaped.
-json_str() {
-  { if [ -n "${2:-}" ]; then cat "$2"; else printf '%s' "$input"; fi; } | tr -d '\r\n' \
-    | grep -oE '"'"$1"'"[[:space:]]*:[[:space:]]*"([^"\\]|\\.)*"' | head -n1 \
-    | sed -E 's/^"'"$1"'"[[:space:]]*:[[:space:]]*"//; s/"$//' || true
-}
+. "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+in_senior_run || exit 0
 
 # unescape \n \r \t (as spaces), \" and \\ so the rules see the command as typed
 cmd="$(json_str command | sed -E 's/\\[nrt]/ /g; s/\\"/"/g; s/\\\\/\\/g')"

@@ -3,7 +3,16 @@ name: senior-build
 description: Senior-engineer build orchestrator (ultracode-lite). Use when the user says "build like a senior", "senior mode", "senior build", "plan and fan out", "ultracode-lite", or asks to build a non-trivial feature/project end-to-end with spec, plan, parallel subagents, review and merge. Runs intake → explore → spec → plan → routed parallel fan-out → adversarial review + test gate → integrate → report, with human STOP checkpoints.
 when_to_use: 'Trigger phrases: "build like a senior: <goal>", "do this like a senior engineer", "senior mode on", "spec it, plan it, fan it out". Do NOT use for one-line fixes, typos, renames, or pure questions.'
 argument-hint: "[--auto] [--max-parallel N] <goal>"
-allowed-tools: Read Grep Glob Bash(git status *) Bash(git log *) Bash(git diff *) Bash(git branch *) Bash(git rev-parse *) Bash(mkdir -p .senior*)
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash(git status *)
+  - Bash(git log *)
+  - Bash(git diff *)
+  - Bash(git branch *)
+  - Bash(git rev-parse *)
+  - Bash(mkdir -p .senior*)
 ---
 
 # Senior Build Orchestrator
@@ -55,7 +64,7 @@ Then wait for the user. Use AskUserQuestion for multiple-choice decisions when a
 ```json
 {"slug":"csv-export","phase":"intake|explore|spec|plan|awaiting-approval|execute|review|integrate|report|done|aborted",
  "mode":"interactive|auto","base_branch":"main","senior_branch":"senior/csv-export","base_sha":"<sha>",
- "max_parallel":4,"gate":"pending|passed|failed","wps":{"WP-1":{"status":"todo|running|done|failed|blocked","branch":null,"fix_rounds":0,"escalated":false}}}
+ "max_parallel":4,"gate":"pending|passed|failed","wps":{"WP-1":{"status":"todo|running|done|failed|blocked","branch":null,"worktree":null,"fix_rounds":0,"escalated":false}}}
 ```
 The Stop hook reads `phase` and `gate`: while phase is execute/review/integrate and gate ≠ passed, it will remind you to verify before ending your turn.
 
