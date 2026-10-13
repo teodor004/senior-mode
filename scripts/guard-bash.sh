@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 # PreToolUse(Bash): deny destructive or exfiltrating commands. Applies to main session AND subagents.
+# Plain bash/grep/sed (no jq), so the guard is never silently off for lack of a dependency.
 set -euo pipefail
 input="$(cat)"
-cmd="$(printf '%s' "$input" | jq -r '.tool_input.command // empty')"
+
+# json_str KEY [FILE]: first string value of "KEY" in the hook input (or FILE), still JSON-escaped.
+json_str() {
+  { if [ -n "${2:-}" ]; then cat "$2"; else printf '%s' "$input"; fi; } | tr -d '\r\n' \
+    | grep -oE '"'"$1"'"[[:space:]]*:[[:space:]]*"([^"\\]|\\.)*"' | head -n1 \
+    | sed -E 's/^"'"$1"'"[[:space:]]*:[[:space:]]*"//; s/"$//' || true
+}
+
+# unescape \n \r \t (as spaces), \" and \\ so the rules see the command as typed
+cmd="$(json_str command | sed -E 's/\\[nrt]/ /g; s/\\"/"/g; s/\\\\/\\/g')"
 [ -z "$cmd" ] && exit 0
 
 deny() {
-  jq -n --arg r "senior-mode guard: $1" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$r}}'
+  # reasons are fixed strings with no quotes or backslashes, so they need no JSON escaping
+  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"senior-mode guard: %s"}}\n' "$1"
   exit 0
 }
 

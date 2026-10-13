@@ -34,7 +34,7 @@ Plugins cannot set permissions or `worktree.baseRef`, so add this to `.claude/se
 ```
 Without it, worktree subagents branch from your *default branch*, not your current branch.
 Also: `echo ".claude/worktrees/" >> .gitignore` and `echo ".senior/" >> .gitignore` (or commit `.senior/<slug>/` as design docs — your choice).
-Hooks need `jq` and `git` (`sudo apt install jq` in WSL). Run Claude Code inside WSL2, not PowerShell.
+Hooks need only `bash`, `grep`, `sed` and `git` (all present in Git Bash, WSL, macOS and Linux) — no `jq`. Run Claude Code inside WSL2, not PowerShell.
 
 ## Usage
 ```text
